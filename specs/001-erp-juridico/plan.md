@@ -7,7 +7,12 @@
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Implement an MVP of an ERP tailored to Colombian law firms that centralizes case
+management, document handling, agenda/procedural calendar, user roles and
+reporting. Technical approach: React 18 + TypeScript frontend (Vite, Tailwind) and
+Django 4.2 + DRF backend with PostgreSQL 15, Redis caching and Electron for an
+optional desktop packaging. Full-text search will use PostgreSQL full-text for
+MVP (pg_trgm + tsvector) with a migration path to Elasticsearch if needed.
 
 ## Technical Context
 
@@ -17,15 +22,26 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**:
+- Backend: Python 3.11, Django 4.2
+- Frontend: TypeScript, React 18
+**Primary Dependencies**:
+- Frontend: React 18, Vite, Tailwind CSS, React Query, React Router
+- Backend: Django 4.2, Django REST Framework, Celery, Redis
+**Storage**: PostgreSQL 15 (primary). Local SQLite for Electron offline cache.
+**Testing**: Backend: pytest/pytest-django; Frontend: Jest + React Testing Library; E2E: Cypress
+**Target Platform**: Web (desktop-first) + Electron desktop wrapper
+**Project Type**: Web application (frontend + backend) with desktop packaging
+**Performance Goals**:
+- List views (cases, clients): p95 < 1s
+- Full-text document search: < 3s for typical queries (paging applied)
+- Dashboard load: < 2s
+**Constraints**:
+- Offline read-only cache for Electron; writes require connectivity
+- Upload limit: 50MB/file (MVP)
+- RPO < 1 hour, RTO < 4 hours (backup/DR requirements)
+**Scale/Scope**: Initial target 5-50 users per deployment; design to scale horizontally
+  to 100+ with infra changes.
 
 ## Constitution Check
 
@@ -47,6 +63,28 @@ de avanzar a Phase 0 (y re-evaluados en Phase 1):
 - Observabilidad: Sentry/monitoring plan y métricas clave para producción (Principio 4.3).
 
 Cada ítem debe incluir evidencia (test, configuración, o documento de diseño) y la persona responsable de la verificación.
+
+Constitution Check - Evidence & Owners
+
+- Seguridad y Confidencialidad (Principio 2): TLS enforced, AES-256 for confidential
+  documents at rest, backend permission checks on every request, no PII in production
+  logs. Evidence: infra TLS config, encryption-at-rest policy, automated log scrubber.
+  Owner: Security Lead / Tech Lead.
+- Pruebas (Principio 3): Minimum coverage targets (70% backend, 60% frontend) enforced
+  in CI. Evidence: GitHub Actions workflow, coverage reports. Owner: QA Lead.
+- Auditoría y Retención (Principio 6): Append-only audit log table, backups daily and
+  tested quarterly. Evidence: DB schema (audit_log), backup playbooks. Owner: SRE/Admin.
+- Privacidad y Cumplimiento Legal (Principio 8): ARCO process documented, data export
+  endpoints for subject access requests. Evidence: privacy policy doc + process flow.
+  Owner: Legal / Compliance.
+- Accesibilidad (Principio 5): WCAG 2.1 AA checklist in acceptance tests for P1 flows.
+  Evidence: automated contrast checks + keyboard navigation test matrices. Owner: UX Lead.
+- Performance y Escalabilidad (Principio 4): Benchmarks for p95 latencies, mandatory
+  pagination in APIs, health checks and autoscaling plan. Evidence: benchmark reports.
+  Owner: Tech Lead / SRE.
+- Observabilidad (Principio 4.3): Sentry for errors, Prometheus/Grafana or managed
+  metrics for production KPIs, structured JSON logs. Evidence: monitoring dashboards.
+  Owner: SRE.
 
 ## Project Structure
 
