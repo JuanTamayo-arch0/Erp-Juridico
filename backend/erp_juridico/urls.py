@@ -9,4 +9,5 @@ def root(request):
 urlpatterns = [
     path('', root),
     path('health/', include('backend.apps.health.urls')),
+    path('api/auth/', include('backend.apps.auth.urls')),
 ]
