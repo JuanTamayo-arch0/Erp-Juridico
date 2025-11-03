@@ -18,6 +18,17 @@
 - [X] T008 [P] Add initial `requirements.txt` (backend) and `package.json` (frontend/electron) with core deps
 - [X] T009 [P] Create `docs/CONSTITUTION.md` referencing `.specify/memory/constitution.md` and link in README
 - [X] T010 [P] Constitution compliance checkpoint: document how the setup satisfies mandatory constitution gates (security, logging, backups, basic tests) - `specs/001-erp-juridico/plan.md`
+- [X] T011 Setup PostgreSQL database and initial migrations in `backend/` (create DB, users, migrations folder)
+- [X] T012 Setup Redis and Celery worker skeleton in `backend/` and configure `celery.py` - `backend/`
+- [X] T013 Implement authentication endpoints and token handling (JWT refresh) in `backend/apps/auth/` - `backend/apps/auth/views.py`
+- [X] T014 Implement Role and Permission models and seed script in `backend/apps/users/models.py` and `backend/apps/users/management/commands/seed_roles.py`
+- [X] T015 [P] Implement storage backend abstraction and S3 adapter (pre-signed uploads) - `backend/apps/storage/` (uses settings for S3/MinIO)
+- [X] T016 Implement AuditLog model and append-only interface + DB migrations - `backend/apps/audit/models.py`
+- [X] T017 Implement document encryption-at-rest policy and integration hooks (encrypt on upload / decrypt for downloads) - `backend/apps/storage/` and `backend/settings.py`
+- [X] T018 Add healthcheck endpoint `/health` verifying DB, Redis, disk space - `backend/apps/health/views.py`
+- [X] T019 [P] Configure Sentry + basic logging (structured JSON) in backend settings and integrate DSN env var - `backend/settings.py`
+- [X] T020 Implement basic frontend authentication flow (login, token refresh) - `frontend/src/services/auth.ts`
+- [X] T021 Create CI job to run DB migrations in staging and run smoke tests - `.github/workflows/ci.yml`
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
