@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, '001-*', 'feat/*' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install backend deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+      - name: Check for Constitution Check presence
+        run: |
+          # Ensure plan.md contains 'Constitution Check' and specs have tasks.md
+          if ! grep -q "Constitution Check" specs/001-erp-juridico/plan.md; then echo "Constitution Check missing"; exit 1; fi
+          if [ ! -f specs/001-erp-juridico/tasks.md ]; then echo "tasks.md missing"; exit 1; fi

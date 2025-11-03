@@ -1,0 +1,10 @@
+# ignore node modules and python envs to keep docker context small
+node_modules
+venv
+.venv
+env
+dist
+build
+Dockerfile*
+*.log
+.git
