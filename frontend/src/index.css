@@ -1,0 +1,37 @@
+@import './styles/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Small default styles */
+body {
+  background: var(--app-bg);
+  color: var(--text-inverse);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Ensure headings and strong text have good contrast */
+h1,h2,h3,h4,strong { color: var(--card-text-color); }
+
+/* container */
+.app-container {
+  /* Allow a wider layout on large screens so content doesn't look too narrow */
+  @apply max-w-7xl mx-auto p-6;
+}
+
+/* Typography scale overrides */
+h1 { font-size: var(--type-5); }
+h2 { font-size: var(--type-4); }
+h3 { font-size: var(--type-3); }
+small, .text-xs { font-size: var(--type-0); }
+
+.card { /* provide default Tailwind fallback */
+  background: var(--card-surface);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+  padding: 1rem;
+  color: var(--card-text-color);
+}

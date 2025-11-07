@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: ERP para Despachos Jurídicos - API
+  version: 1.0.0
+servers:
+  - url: https://api.example.org
+paths:
+  /auth/login:
+    post:
+      summary: Login (returns auth tokens)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: tokens
+  /cases:
+    get:
+      summary: List cases with pagination and filters
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: paged list of cases
+    post:
+      summary: Create a new case
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseCreate'
+      responses:
+        '201':
+          description: created
+  /cases/{id}:
+    get:
+      summary: Get case detail
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: case object
+  /cases/{id}/documents:
+    post:
+      summary: Upload a document for the case
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                type:
+                  type: string
+      responses:
+        '201':
+          description: document created
+components:
+  schemas:
+    CaseCreate:
+      type: object
+      required: [title, type_of_process, owner_id]
+      properties:
+        title:
+          type: string
+        type_of_process:
+          type: string
+        owner_id:
+          type: string
+        client_ids:
+          type: array
+          items:
+            type: string
+
+*** End openapi.yaml

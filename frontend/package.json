@@ -1,0 +1,92 @@
+{
+  "name": "erp-juridico-frontend",
+  "version": "0.1.0",
+  "main": "electron/main.js",
+  "description": "ERP Jurídico - Frontend + Electron shell",
+  "author": { "name": "ERP Jurídico Team", "email": "dev@erpjuridico.local" },
+  "homepage": "https://github.com/JuanTamayo-arch0/Erp-Juridico",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx",
+    "visual:screenshot": "node tests/smoke/screenshot.js",
+    "electron:dev": "VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "electron:start": "electron .",
+    "dev:electron": "concurrently -k -n VITE,ELECTRON -c blue,green \"vite\" \"wait-on tcp:5173 && VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "dev:electron:sw": "concurrently -k -n VITE,ELECTRON -c blue,green \"vite\" \"wait-on tcp:5173 && FORCE_SOFTWARE_RENDERING=1 VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "dev:electron:reset": "concurrently -k -n VITE,ELECTRON -c blue,green \"vite\" \"wait-on tcp:5173 && CLEAR_AUTH=1 VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+  "dist:linux": "npm run build && electron-builder -l AppImage -l deb",
+    "dist:win": "npm run build && electron-builder -w nsis",
+    "dist:mac": "npm run build && electron-builder -m dmg"
+  },
+  "dependencies": {
+    "@fullcalendar/core": "^6.1.8",
+    "@fullcalendar/daygrid": "^6.1.8",
+    "@fullcalendar/interaction": "^6.1.8",
+    "@fullcalendar/react": "^6.1.8",
+    "@fullcalendar/timegrid": "^6.1.8",
+    "@hello-pangea/dnd": "^16.0.1",
+    "@heroicons/react": "^2.0.18",
+    "chart.js": "^4.4.0",
+    "react": "^18.0.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/pngjs": "^6.0.5",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.0.0",
+    "concurrently": "^8.2.2",
+    "electron": "^25.0.0",
+    "electron-builder": "^24.13.3",
+    "eslint": "^8.0.0",
+    "pixelmatch": "^5.3.0",
+    "postcss": "^8.0.0",
+    "puppeteer": "^21.0.1",
+    "tailwindcss": "^3.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0",
+    "wait-on": "^7.0.1"
+  },
+  "build": {
+    "appId": "com.empresa.erpjuridico",
+    "productName": "ERP Juridico",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Office",
+      "maintainer": "ERP Jurídico Team <dev@erpjuridico.local>"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity"
+    }
+  }
+}
